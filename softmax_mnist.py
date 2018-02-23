@@ -151,8 +151,8 @@ class SoftmaxPredictor:
 
 if __name__ == '__main__':
 
-    save_file = "_model_trainings/softmax_test_mnist.ckpt"
-    load_file = "_model_trainings/softmax_default_mnist.ckpt"
+    save_file = "_training_saves/softmax_test_mnist.ckpt"
+    load_file = "_training_saves/softmax_default_mnist.ckpt"
     
     if len(sys.argv) < 2:
         print "USAGE: python softmax_mnist.py train [num_epochs] [save?] [save_path]\n\t or: python softmax_mnist.py test [MNIST test datatset img index]"
@@ -171,7 +171,7 @@ if __name__ == '__main__':
                     save = bool(int(sys.argv[3]))
                     if len(sys.argv) > 4 and save == True:
                         save_file = sys.argv[4]
-                        save_file = '_model_trainings/'+ save_file if '_model_trainings/' not in save_file else save_file
+                        save_file = '_training_saves/'+ save_file if '_training_saves/' not in save_file else save_file
                         save_file = save_file + '.ckpt' if '.ckpt' not in save_file else save_file
             print "Starting Training with {0:.0f} epochs".format(epochs)
             softmax.train(epochs=epochs, save_values = save)
@@ -182,7 +182,7 @@ if __name__ == '__main__':
                 idx = int(sys.argv[2])
                 if len(sys.argv) > 3:
                     load_file = sys.argv[3]
-                    load_file = '_model_trainings/'+load_file if '_model_trainings/' not in load_file else load_file
+                    load_file = '_training_saves/'+load_file if '_training_saves/' not in load_file else load_file
                     load_file = load_file + '.ckpt' if load_file[:-5] != '.ckpt' else load_file
             softmax.load_saved_model()
             softmax.test_prediction(idx)
