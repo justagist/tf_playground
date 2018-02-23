@@ -6,12 +6,14 @@ from tensorflow.examples.tutorials.mnist import input_data
 import numpy as np
 import matplotlib.pyplot as plt
 
+def load_mnist_data():
+    return input_data.read_data_sets("MNIST_data/", one_hot=True)
 
 class AutoEncoder:
 
-    def __init__(self, data):
+    def __init__(self):
 
-        self._data = data
+        self._data = mnist
         self._define_model()
         self._sess = tf.Session()
         # self._saver = tf.train.Saver()
@@ -91,7 +93,7 @@ class AutoEncoder:
                 break
 
         if save_values:
-            save_path = saver.save(self._sess, "_model_trainings/mnist_model_test.ckpt")
+            save_path = saver.save(self._sess, save_file)
             print("Model saved in path: %s" % save_path)
 
         self._loss = loss
@@ -139,7 +141,7 @@ class AutoEncoder:
         plt.imshow(np.reshape(out_decode,(28,28)))
         plt.show()
 
-    def test_mnist(self, image_idx):
+    def test_autoencoding(self, image_idx):
 
         self.decode_and_compare(self.encode_mnist_image(image_idx),image_idx)
 
@@ -185,30 +187,48 @@ class AutoEncoder:
     def load_saved_model(self):
 
         saver = tf.train.Saver()
-        saver.restore(self._sess, "_model_trainings/mnist_model.ckpt")
+        saver.restore(self._sess, load_file)
+        print "Restored Session Model from", load_file
         self._use_saved_model = True
+
 
 if __name__ == '__main__':
 
+    save_file = "_model_trainings/autoencoder_test_mnist.ckpt"
+    load_file = "_model_trainings/autoencoder_default_mnist.ckpt"
+    
     if len(sys.argv) < 2:
-        print "USAGE: python autoencoder.py train [num_epochs]\n\t or: python autoencoder.py test [MNIST datatset img index]"
+        print "USAGE: python autoencoder_mnist.py train [num_epochs] [save?] [save_path]\n\t or: python autoencoder_mnist.py test [MNIST test datatset img index]"
+
+
 
     else:
         mnist = load_mnist_data()
-        aen = AutoEncoder(mnist)
+        aen = AutoEncoder()
         if sys.argv[1] == 'train':
-            epochs = 10000
+            epochs = 1000
+            save = False
             if len(sys.argv) > 2:
-                epochs = int(sys.argv[2])
+                epochs = int(sys.argv[2]) if (sys.argv[2] != '0') else epochs
+                if len(sys.argv) > 3:
+                    save = bool(int(sys.argv[3]))
+                    if len(sys.argv) > 4 and save == True:
+                        save_file = sys.argv[4]
+                        save_file = '_model_trainings/'+ save_file if '_model_trainings/' not in save_file else save_file
+                        save_file = save_file + '.ckpt' if '.ckpt' not in save_file else save_file
             print "Starting Training with {0:.0f} epochs".format(epochs)
-            aen.train_network(epochs=epochs)
+            aen.train_network(epochs=epochs, save_values = save)
 
         elif sys.argv[1] == 'test':
             idx = 100
-            aen.load_saved_model()
             if len(sys.argv) > 2:
                 idx = int(sys.argv[2])
-            aen.test_mnist(idx)
+                if len(sys.argv) > 3:
+                    load_file = sys.argv[3]
+                    load_file = '_model_trainings/'+load_file if '_model_trainings/' not in load_file else load_file
+                    load_file = load_file + '.ckpt' if load_file[:-5] != '.ckpt' else load_file
+            aen.load_saved_model()
+            aen.test_autoencoding(idx)
 
 
     # aen.test_mnist(212)
