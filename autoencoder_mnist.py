@@ -7,11 +7,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def load_mnist_data():
-    return input_data.read_data_sets("MNIST_data/", one_hot=True)
-
-device_string = "/cpu:0"
-
 class AutoEncoder:
 
     def __init__(self, data):
@@ -19,7 +14,6 @@ class AutoEncoder:
         self._data = data
         self._define_model()
         self._sess = tf.Session()
-        self._init_op = tf.global_variables_initializer()
         # self._saver = tf.train.Saver()
         self._use_saved_model = False
         # self.plot_training_losses()
@@ -59,6 +53,7 @@ class AutoEncoder:
         if save_values:
             saver = tf.train.Saver()
 
+        self._init_op = tf.global_variables_initializer()
         self._sess.run(self._init_op)
 
         loss = [0]*epochs
