@@ -3,6 +3,7 @@
 
     @author: JustaGist
     @package: tf_playground
+
 '''
 import sys
 import tensorflow as tf
@@ -204,8 +205,6 @@ if __name__ == '__main__':
     if len(sys.argv) < 2:
         print "USAGE: python autoencoder_mnist.py train [num_epochs] [save?] [save_path]\n\t or: python autoencoder_mnist.py test [MNIST test datatset img index]"
 
-
-
     else:
         mnist = load_mnist_data()
         aen = AutoEncoder()
@@ -233,7 +232,6 @@ if __name__ == '__main__':
                     load_file = load_file + '.ckpt' if load_file[:-5] != '.ckpt' else load_file
             aen.load_saved_model()
             aen.test_autoencoding(idx)
-
-
-    # aen.test_mnist(212)
-
+        else:
+            print "Invalid Usage."
+            print "USAGE: python autoencoder_mnist.py train [num_epochs] [save?] [save_path]\n\t or: python autoencoder_mnist.py test [MNIST test datatset img index]"

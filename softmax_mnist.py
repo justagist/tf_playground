@@ -7,6 +7,7 @@
 
     @author: JustaGist
     @package: tf_playground
+
 '''
 
 
@@ -55,7 +56,6 @@ class SoftmaxPredictor:
 
 
     def define_loss(self, method = 1):
-
         
         if method == 1: # (numerically less stable)
 
@@ -159,8 +159,6 @@ if __name__ == '__main__':
     if len(sys.argv) < 2:
         print "USAGE: python softmax_mnist.py train [num_epochs] [save?] [save_path]\n\t or: python softmax_mnist.py test [MNIST test datatset img index]"
 
-
-
     else:
         mnist = load_mnist_data()
         softmax = SoftmaxPredictor()
@@ -179,7 +177,7 @@ if __name__ == '__main__':
             softmax.train(epochs=epochs, save_values = save)
 
         elif sys.argv[1] == 'test':
-            idx = 100
+            idx = 9749 # softmax fails with this but mcn succeeds
             if len(sys.argv) > 2:
                 idx = int(sys.argv[2])
                 if len(sys.argv) > 3:
@@ -188,8 +186,6 @@ if __name__ == '__main__':
                     load_file = load_file + '.ckpt' if load_file[:-5] != '.ckpt' else load_file
             softmax.load_saved_model()
             softmax.test_prediction(idx)
-    # softmax = SoftmaxPredictor()
-    # softmax.test_accuracy()
-    # softmax.train()
-    # softmax.test_accuracy()
-    # softmax.test_prediction(389)
+        else:
+            print "Invalid Usage."
+            print "USAGE: python softmax_mnist.py train [num_epochs] [save?] [save_path]\n\t or: python softmax_mnist.py test [MNIST test datatset img index]"
