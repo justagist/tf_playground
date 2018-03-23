@@ -1,5 +1,9 @@
-# autoencoder class to learn and predict mnist images
+'''
+    # autoencoder class to learn and predict mnist images: Reduces 28x28 image to a 2D value and learns to predict the class from it.
 
+    @author: JustaGist
+    @package: tf_playground
+'''
 import sys
 import tensorflow as tf
 from tensorflow.examples.tutorials.mnist import input_data

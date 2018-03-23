@@ -5,6 +5,8 @@
     - The exponentials ensure that all the output activations are positive. And the sum in the denominator ensures that the softmax outputs sum to 1.
     - Can think of softmax as a way of rescaling the z_i, and then squishing them together to form a probability distribution.
 
+    @author: JustaGist
+    @package: tf_playground
 '''
 
 
