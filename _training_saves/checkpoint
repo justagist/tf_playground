@@ -1,2 +1,2 @@
-model_checkpoint_path: "mcn_classifier_default_mnist.ckpt"
-all_model_checkpoint_paths: "mcn_classifier_default_mnist.ckpt"
+model_checkpoint_path: "mcn_classifier_test_mnist.ckpt"
+all_model_checkpoint_paths: "mcn_classifier_test_mnist.ckpt"

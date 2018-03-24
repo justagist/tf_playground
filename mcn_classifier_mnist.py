@@ -11,6 +11,7 @@ from tensorflow.examples.tutorials.mnist import input_data
 import tensorflow as tf
 import matplotlib.pyplot as plt
 import numpy as np
+import time
 
 
 def load_mnist_data():
@@ -104,7 +105,7 @@ class MultiConvNetClassifier:
         correct_prediction = tf.equal(tf.argmax(self.y_conv_,1), tf.argmax(self.y_,1))
         self.accuracy_ = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 
-    def train(self, epochs = 1000, eval_accuracy = True, plot_losses = True, learning_rate = 1e-4, save_values = True):
+    def train(self, epochs = 1000, eval_accuracy = True, plot_losses = True, learning_rate = 1e-4, save_values = False):
 
         if save_values:
             saver = tf.train.Saver()
@@ -120,16 +121,17 @@ class MultiConvNetClassifier:
         training_done = False
 
         loss = [0]*epochs
-    
+        
+        start_time = time.time()
         while not training_done:
 
             try:
                 batch = mnist.train.next_batch(50)
 
                 if eval_accuracy and i%100==0:
-
+                    duration = time.time() - start_time
                     train_accuracy = self._sess.run(self.accuracy_, feed_dict={self.x_:batch[0], self.y_: batch[1], self.keep_prob_: 1.0})
-                    print "iter:", i, "Training: {0:.0f}%".format(float(i/float(epochs))*100), "training accuracy %g"%(train_accuracy)
+                    print "iter:", i, "Training: {0:.0f}%".format(float(i/float(epochs))*100), "training accuracy %g"%(train_accuracy), "duration:", duration
 
                 _, loss[i] = self._sess.run([_train_step, self._cross_entropy], feed_dict={self.x_: batch[0], self.y_: batch[1], self.keep_prob_: 0.5})
 
@@ -151,8 +153,10 @@ class MultiConvNetClassifier:
             self._plot_training_losses()
 
         batch = mnist.train.next_batch(50)
+        duration = time.time() - start_time
         train_accuracy = self._sess.run(self.accuracy_, feed_dict={self.x_:batch[0], self.y_: batch[1], self.keep_prob_: 1.0})
         print("Final training accuracy %g"%(train_accuracy))
+        print "Duration:", duration
 
 
     def _plot_training_losses(self):
