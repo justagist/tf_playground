@@ -100,8 +100,8 @@ class SoftmaxPredictor:
 
             for i in range(epochs):
 
-                if i%(int(epochs/10))==0:
-                    print "Training: {0:.0f}%".format(i/float(epochs)*100)
+                if (i+1)%(int(epochs/10))==0:
+                    print "Training: {0:.0f}%".format((i+1)/float(epochs)*100)
 
                 batch_xs, batch_ys = mnist.train.next_batch(100) # batch_ys: one hot vectors
                 self._sess.run(optimiser_function, feed_dict={self._inputs: batch_xs, self._true_labels: batch_ys})

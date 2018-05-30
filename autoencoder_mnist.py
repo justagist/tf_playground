@@ -74,8 +74,8 @@ class AutoEncoder:
                 _, loss[i] = self._sess.run([self._train_op, self._loss_op], feed_dict={self._input: batch_xs, self._true_output: batch_xs, self._pv: [[0.02,0.98]], self._beta: [[0.1]]})
                 
                 i+=1
-                if i%(int(epochs/10))==0:
-                    print "Training: {0:.0f}%".format(i/float(epochs)*100)
+                if (i+1)%(int(epochs/10))==0:
+                    print "Training: {0:.0f}%".format((i+1)/float(epochs)*100)
                     if show_train:
                         idx = 3
                         out_code, out_decode = self._sess.run([self._encoder_op,self._train_decode], feed_dict={self._input: np.expand_dims(mnist.test.images[idx,:],0)})

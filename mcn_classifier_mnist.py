@@ -39,7 +39,7 @@ class MultiConvNetClassifier:
 
         self._create_network()
 
-        self._define_loss_function_and_optimiser()
+        self._define_loss_function()
 
         self._define_accuracy_measure()
         
@@ -97,7 +97,7 @@ class MultiConvNetClassifier:
 
         self.y_conv_ = tf.matmul(h_fc1_drop_, W_fc2_) + b_fc2_ # ----- predicted output
 
-    def _define_loss_function_and_optimiser(self):
+    def _define_loss_function(self):
         # ----- combines softmax function and cross-entropy cost
         self._cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=self.y_, logits=self.y_conv_))
 
@@ -128,10 +128,10 @@ class MultiConvNetClassifier:
             try:
                 batch = mnist.train.next_batch(50)
 
-                if eval_accuracy and i%100==0:
+                if eval_accuracy and (i+1)%100==0:
                     duration = time.time() - start_time
                     train_accuracy = self._sess.run(self.accuracy_, feed_dict={self.x_:batch[0], self.y_: batch[1], self.keep_prob_: 1.0})
-                    print "iter:", i, "Training: {0:.0f}%".format(float(i/float(epochs))*100), "training accuracy %g"%(train_accuracy), "duration:", duration
+                    print "iter:", i, "Training: {0:.0f}%".format(float((i+1)/float(epochs))*100), "training accuracy %g"%(train_accuracy), "duration:", duration
 
                 _, loss[i] = self._sess.run([_train_step, self._cross_entropy], feed_dict={self.x_: batch[0], self.y_: batch[1], self.keep_prob_: 0.5})
 
